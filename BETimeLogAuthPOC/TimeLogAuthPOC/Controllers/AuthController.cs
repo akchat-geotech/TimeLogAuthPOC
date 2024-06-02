@@ -96,7 +96,7 @@ namespace TimeLogAuthPOC.Controllers
                          .FirstOrDefaultAsync();
         }
         [HttpGet("auth-required")]
-        [HasPermission("timelog", "create")]
+        [Authorize(Policy = "TimeLogCreatePolicy")]
         public async Task<IActionResult> AuthRequired()
         {
             return Ok("Authorized");

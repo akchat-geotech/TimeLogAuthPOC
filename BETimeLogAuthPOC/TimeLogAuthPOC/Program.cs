@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using TimeLogAuthPOC.Attribute;
 using TimeLogAuthPOC.Config;
 using TimeLogAuthPOC.Data;
 using TimeLogAuthPOC.Entity;
@@ -63,6 +65,14 @@ builder.Services.AddAuthentication(config =>
         ValidAudience = jwtConfig.Audience,
     };
 });
+// Define the custom authorization policy
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("TimeLogCreatePolicy", policy =>
+        policy.Requirements.Add(new TimeLogRequirement("timelog", "create")));
+});
+
+builder.Services.AddSingleton<IAuthorizationHandler, TimeLogHandler>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
 var app = builder.Build();
@@ -78,25 +88,26 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-/*
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
 
-    try
-    {
-        var context = services.GetRequiredService<ApplicationDbContext>();
-        var userManager = services.GetRequiredService<UserManager<User>>();
-        var roleManager = services.GetRequiredService<RoleManager<Role>>();
-        context.Database.Migrate();
-        context.SeedProjectsRolesAndUsers(userManager, roleManager).Wait();
-    }
-    catch (Exception ex)
-    {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred seeding the DB.");
-    }
-}
-*/
+// // use in in first run 
+//using (var scope = app.Services.CreateScope())
+//{
+//    var services = scope.ServiceProvider;
+
+//    try
+//    {
+//        var context = services.GetRequiredService<ApplicationDbContext>();
+//        var userManager = services.GetRequiredService<UserManager<User>>();
+//        var roleManager = services.GetRequiredService<RoleManager<Role>>();
+//        context.Database.Migrate();
+//        context.SeedProjectsRolesAndUsers(userManager, roleManager).Wait();
+//    }
+//    catch (Exception ex)
+//    {
+//        var logger = services.GetRequiredService<ILogger<Program>>();
+//        logger.LogError(ex, "An error occurred seeding the DB.");
+//    }
+//}
+
 
 app.Run();
