@@ -1,0 +1,28 @@
+.grid-background {
+  background-color: linear-gradient(#f0f3f8, #d9d9d9);
+  background-image: linear-gradient(
+      0deg,
+      transparent 24%,
+      rgba(217, 217, 217, 0.71) 25%,
+      rgba(217, 217, 217, 0.71) 26%,
+      transparent 27%,
+      transparent 74%,
+      rgba(217, 217, 217, 0.71) 75%,
+      rgba(217, 217, 217, 0.71) 76%,
+      transparent 77%,
+      transparent
+    ),
+    linear-gradient(
+      90deg,
+      transparent 24%,
+      rgba(217, 217, 217, 0.71) 25%,
+      rgba(217, 217, 217, 0.71) 26%,
+      transparent 27%,
+      transparent 74%,
+      rgba(217, 217, 217, 0.71) 75%,
+      rgba(217, 217, 217, 0.71) 76%,
+      transparent 77%,
+      transparent
+    );
+  background-size: 65px 65px;
+}
